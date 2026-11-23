@@ -12,7 +12,7 @@ sequenceDiagram
     actor User as Usuario
     participant UI as Frontend Web (UI)
     participant Auth as Módulo de Autenticación (Usuario)
-    database BD as Base de Datos Central
+    participant BD as Base de Datos Central
     participant SSO as SSO Cooperativa
 
     User->>+UI: Ingresar credenciales institucionales
@@ -42,7 +42,7 @@ sequenceDiagram
     actor Dev as Desarrollador
     participant UI as Frontend Web (UI)
     participant Motor as Motor de Carga (CargaDesarrollador)
-    database BD as Base de Datos Central
+    participant BD as Base de Datos Central
 
     rect rgba(2, 132, 199, 0.08)
         Note over Dev,UI: ref: UC1 - Iniciar sesión con cuenta de la cooperativa
@@ -76,7 +76,7 @@ sequenceDiagram
     actor Lider as Líder de tecnología
     participant UI as Frontend Web (UI)
     participant Motor as Motor de Carga (PanelCarga)
-    database BD as Base de Datos Central
+    participant BD as Base de Datos Central
 
     rect rgba(2, 132, 199, 0.08)
         Note over Lider,UI: ref: UC1 - Iniciar sesión con cuenta de la cooperativa
@@ -114,7 +114,7 @@ sequenceDiagram
     actor User as Usuario (Desarrollador / Líder)
     participant UI as Frontend Web (UI)
     participant Motor as Motor de Carga
-    database BD as Base de Datos Central
+    participant BD as Base de Datos Central
 
     rect rgba(2, 132, 199, 0.08)
         Note over User,UI: ref: UC1 - Iniciar sesión con cuenta de la cooperativa
@@ -143,7 +143,7 @@ sequenceDiagram
     actor User as Usuario (Desarrollador / Líder)
     participant UI as Frontend Web (UI)
     participant Motor as Motor de Carga (PanelCarga)
-    database BD as Base de Datos Central
+    participant BD as Base de Datos Central
 
     User->>+UI: Seleccionar criterios (proyecto, estado, fuente, fechas)
     UI->>+Motor: aplicarFiltros(filtrosAplicados)
@@ -163,7 +163,7 @@ sequenceDiagram
     autonumber
     participant Trigger as Motor de Carga / Planificador
     participant Sync as Servicio de Integraciones (Integracion / Notificacion)
-    database BD as Base de Datos Central
+    participant BD as Base de Datos Central
     participant Externos as Sistemas Externos (RedMine / GitLab / GLPI)
     participant Chat as Rocket Chat
 
@@ -200,7 +200,7 @@ sequenceDiagram
     participant UI as Frontend Web (UI)
     participant Sync as Servicio de Integraciones (Integracion / Credencial)
     participant Externos as Sistemas Externos (RedMine / GitLab / GLPI / Rocket Chat)
-    database BD as Base de Datos Central
+    participant BD as Base de Datos Central
 
     rect rgba(2, 132, 199, 0.08)
         Note over Admin,UI: ref: UC1 - Iniciar sesión con cuenta de la cooperativa
@@ -225,4 +225,3 @@ sequenceDiagram
 ```
 
 ---
-
