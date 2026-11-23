@@ -1,0 +1,27 @@
+sequenceDiagram
+    autonumber
+    actor Dev as Desarrollador
+    participant UI as Frontend Web (UI)
+    participant Motor as Motor de Carga (CargaDesarrollador)
+    database BD as Base de Datos Central
+
+    rect rgba(2, 132, 199, 0.08)
+        Note over Dev,UI: ref: UC1 - Iniciar sesión con cuenta de la cooperativa
+    end
+
+    Dev->>+UI: Solicitar vista "Mi Carga Individual"
+
+    rect rgba(2, 132, 199, 0.08)
+        Note over UI,BD: ref: UC6 - Sincronizar datos desde herramientas externas
+    end
+
+    UI->>+Motor: obtenerCargaIndividual(idDesarrollador)
+    Motor->>+BD: consultarItemsAsignados(idDesarrollador)
+    BD-->>-Motor: Lista de Peticion, IncidenteGLPI y MergeRequest
+    Motor->>Motor: calcular() [totalItems, horasEstimadas, nivelCarga]
+    Motor-->>-UI: Objeto CargaDesarrollador
+    UI-->>-Dev: Renderizar panel individual con métricas y tareas
+
+    opt Si el desarrollador aplica filtros
+        Note over Dev,Motor: ref: UC5 - Filtrar información en el panel
+    end

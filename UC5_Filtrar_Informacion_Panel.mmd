@@ -1,0 +1,14 @@
+sequenceDiagram
+    autonumber
+    actor User as Usuario (Desarrollador / Líder)
+    participant UI as Frontend Web (UI)
+    participant Motor as Motor de Carga (PanelCarga)
+    database BD as Base de Datos Central
+
+    User->>+UI: Seleccionar criterios (proyecto, estado, fuente, fechas)
+    UI->>+Motor: aplicarFiltros(filtrosAplicados)
+    Motor->>+BD: consultarItemsFiltrados(filtrosAplicados)
+    BD-->>-Motor: Colección filtrada de ítems
+    Motor->>Motor: calcular() [recalcular métricas visibles]
+    Motor-->>-UI: Datos y métricas actualizadas
+    UI-->>-User: Actualizar tablas y gráficos en pantalla

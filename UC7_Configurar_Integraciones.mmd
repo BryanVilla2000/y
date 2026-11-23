@@ -1,0 +1,28 @@
+sequenceDiagram
+    autonumber
+    actor Admin as Administrador
+    participant UI as Frontend Web (UI)
+    participant Sync as Servicio de Integraciones (Integracion / Credencial)
+    participant Externos as Sistemas Externos (RedMine / GitLab / GLPI / Rocket Chat)
+    database BD as Base de Datos Central
+
+    rect rgba(2, 132, 199, 0.08)
+        Note over Admin,UI: ref: UC1 - Iniciar sesión con cuenta de la cooperativa
+    end
+
+    Admin->>+UI: Ingresar herramienta, urlBase, tipoAuth y token
+    UI->>+Sync: guardarConfiguracion(datosIntegracion, credencial)
+    Sync->>+Externos: probarConexion(urlBase, token)
+
+    alt Conexión y credenciales válidas
+        Externos-->>-Sync: 200 OK (Conexión verificada)
+        Sync->>Sync: encriptarToken(credencial)
+        Sync->>+BD: guardarIntegracionYCredencial(activa=true)
+        BD-->>-Sync: Registro guardado
+        Sync-->>UI: Integración activada correctamente
+        UI-->>Admin: Mostrar confirmación en pantalla
+    else URL o token inválidos
+        Externos-->>Sync: 401 Unauthorized / Error de red
+        Sync-->>-UI: Error de validación de credenciales
+        UI-->>-Admin: Mostrar alerta de error sin activar
+    end

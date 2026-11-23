@@ -1,0 +1,31 @@
+sequenceDiagram
+    autonumber
+    actor Lider as Líder de tecnología
+    participant UI as Frontend Web (UI)
+    participant Motor as Motor de Carga (PanelCarga)
+    database BD as Base de Datos Central
+
+    rect rgba(2, 132, 199, 0.08)
+        Note over Lider,UI: ref: UC1 - Iniciar sesión con cuenta de la cooperativa
+    end
+
+    Lider->>+UI: Solicitar "Panel Consolidado del Equipo"
+
+    rect rgba(2, 132, 199, 0.08)
+        Note over UI,BD: ref: UC6 - Sincronizar datos desde herramientas externas
+    end
+
+    UI->>+Motor: generar()
+    Motor->>+BD: obtenerDesarrolladoresYItemsActivos()
+    BD-->>-Motor: Desarrolladores, Peticion, IncidenteGLPI, MergeRequest
+
+    loop Por cada desarrollador del equipo
+        Motor->>Motor: calcular() [CargaDesarrollador]
+    end
+
+    Motor-->>-UI: PanelCarga (comparativa y alertas de sobrecarga)
+    UI-->>-Lider: Mostrar dashboard consolidado del equipo
+
+    opt Si el líder aplica filtros
+        Note over Lider,Motor: ref: UC5 - Filtrar información en el panel
+    end

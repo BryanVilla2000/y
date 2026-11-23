@@ -1,0 +1,23 @@
+sequenceDiagram
+    autonumber
+    actor User as Usuario
+    participant UI as Frontend Web (UI)
+    participant Auth as Módulo de Autenticación (Usuario)
+    database BD as Base de Datos Central
+    participant SSO as SSO Cooperativa
+
+    User->>+UI: Ingresar credenciales institucionales
+    UI->>+Auth: validarAcceso(usuario, clave)
+    Auth->>+SSO: autenticarInstitucional(credenciales)
+
+    alt Credenciales válidas
+        SSO-->>-Auth: Token SSO válido + datos básicos
+        Auth->>+BD: obtenerRolYPermisos(idUsuario)
+        BD-->>-Auth: Rol (Desarrollador / LiderTecnologia / Administrador)
+        Auth-->>UI: Sesión iniciada + perfil y rol
+        UI-->>User: Redirigir a panel según rol
+    else Credenciales inválidas
+        SSO-->>Auth: Error de autenticación
+        Auth-->>-UI: Acceso denegado
+        UI-->>-User: Mostrar mensaje de error
+    end

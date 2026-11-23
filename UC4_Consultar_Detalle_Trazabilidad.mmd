@@ -1,0 +1,22 @@
+sequenceDiagram
+    autonumber
+    actor User as Usuario (Desarrollador / Líder)
+    participant UI as Frontend Web (UI)
+    participant Motor as Motor de Carga
+    database BD as Base de Datos Central
+
+    rect rgba(2, 132, 199, 0.08)
+        Note over User,UI: ref: UC1 - Iniciar sesión con cuenta de la cooperativa
+    end
+
+    User->>+UI: Seleccionar ítem (Petición, Incidente o MR)
+
+    rect rgba(2, 132, 199, 0.08)
+        Note over UI,BD: ref: UC6 - Sincronizar datos desde herramientas externas
+    end
+
+    UI->>+Motor: obtenerDetalleItem(idItem, tipo)
+    Motor->>+BD: consultarDetalleCompleto(idItem, tipo)
+    BD-->>-Motor: Atributos del ítem + Pipeline asociado (si es MR)
+    Motor-->>-UI: Ficha de trazabilidad + urlExterna
+    UI-->>-User: Mostrar detalle completo y enlace a herramienta origen

@@ -1,0 +1,28 @@
+sequenceDiagram
+    autonumber
+    participant Trigger as Motor de Carga / Planificador
+    participant Sync as Servicio de Integraciones (Integracion / Notificacion)
+    database BD as Base de Datos Central
+    participant Externos as Sistemas Externos (RedMine / GitLab / GLPI)
+    participant Chat as Rocket Chat
+
+    Trigger->>+Sync: sincronizar()
+    Sync->>+BD: obtenerIntegracionesActivasYCredenciales()
+    BD-->>-Sync: Lista de Integracion + Credencial (urlBase, token)
+
+    loop Por cada integración activa
+        Sync->>+Externos: GET datos vía API REST (urlBase, token)
+
+        alt Respuesta exitosa (200 OK)
+            Externos-->>-Sync: JSON (Peticiones, Incidentes, MRs, Pipelines)
+            Sync->>+BD: guardarOActualizarItems() + estado="OK", ultimaSync
+            BD-->>-Sync: Persistencia confirmada
+        else Error de conexión o timeout
+            Externos-->>Sync: Error HTTP / Timeout
+            Sync->>BD: actualizarEstado(estado="ERROR") [mantiene datos previos]
+            Sync->>+Chat: enviar() [Notificacion de fallo al Administrador]
+            Chat-->>-Sync: Alerta enviada
+        end
+    end
+
+    Sync-->>-Trigger: Proceso de sincronización finalizado
